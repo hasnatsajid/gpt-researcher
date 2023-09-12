@@ -1,7 +1,9 @@
-from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException, Request, WebSocket, WebSocketDisconnect, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
+from typing import Annotated
+import websockets
 import json
 import os
 
@@ -29,11 +31,6 @@ def startup_event():
 templates = Jinja2Templates(directory="client")
 
 manager = WebSocketManager()
-
-
-@app.get("/")
-async def read_root(request: Request):
-    return templates.TemplateResponse('index.html', {"request": request, "report": None})
 
 
 @app.websocket("/ws")
